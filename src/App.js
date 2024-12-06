@@ -5,13 +5,15 @@ import Lobby from './components/Lobby';
 function App() {
   const [lobbyId, setLobbyId] = useState(null);
   const [playerName, setPlayerName] = useState("");
+  
+  const [players, setPlayers] = useState([]);
 
   return (
     <div>
       {!lobbyId ? (
-        <Lobby setLobbyId={setLobbyId} setPlayerName={setPlayerName}  />
+        <Lobby players={players} setPlayers={setPlayers}  setLobbyId={setLobbyId} setPlayerName={setPlayerName}  />
       ) : (
-        <GameBoard lobbyId={lobbyId} playerName={playerName} />
+        <GameBoard players={players} setPlayers={setPlayers} lobbyId={lobbyId} playerName={playerName} />
       )}
     </div>
   );

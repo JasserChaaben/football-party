@@ -1,43 +1,42 @@
 import React, { useEffect, useState } from 'react';
-import io from 'socket.io-client';
-import Dice from './Dice';
+import socket from '../socket'; // Import the singleton socket
 
-const socket = io('http://localhost:3001'); // Replace with your backend URL
-
-function GameBoard({ lobbyId, playerName }) {
-  const [players, setPlayers] = useState([]);
-  const [playerPosition, setPlayerPosition] = useState({}); // Track positions
+function GameBoard({players,setPlayers, lobbyId, playerName }) {
+  const [error, setError] = useState(null);
 
   useEffect(() => {
-    socket.emit('joinGame', { lobbyId, playerName });
+    console.log("Joining lobby....");
+    
+    console.log("test")
+   
+    
+    socket.off('updateLobby'); 
+    socket.on('updateLobby', handleUpdateLobby); 
 
-    socket.on('updateLobby', (players) => {
-      setPlayers(players);
-      console.log("players");
-    });
+    console.log("test2")
+    return () => {
+      socket.off('updateLobby', handleUpdateLobby); 
+      socket.emit('leaveLobby', { lobbyId, playerId: socket.id }); 
+    };
+  }, [lobbyId, playerName]); // Re-run when lobbyId or playerName changes
 
-    socket.on('updateGameState', (state) => {
-      setPlayerPosition(state);
-    });
-
-    return () => socket.disconnect();
-  }, [lobbyId, playerName]);
-
-  const rollDice = () => {
-    const diceRoll = Math.floor(Math.random() * 6) + 1;
-    socket.emit('playerMove', { lobbyId, playerName, diceRoll });
+  const handleUpdateLobby = (players) => {
+    console.log("test")
+    setPlayers(players);
+    console.log('Players updated:', players);
   };
 
   return (
     <div>
+      <h3>lobby code is : {lobbyId}</h3>
       <h1>Game Board</h1>
+      {error && <p style={{ color: 'red' }}>{error}</p>}
       <p>Players in this lobby:</p>
       <ul>
-        {players.map((p) => (
-          <li key={p.id}>{p.name}</li>
+        {players.map((player) => (
+          <li key={player.id}>{player.name}</li>
         ))}
       </ul>
-      <Dice rollDice={rollDice} />
     </div>
   );
 }
