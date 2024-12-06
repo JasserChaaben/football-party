@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import socket from '../socket'; // Import the singleton socket
+import socket from '../socket'; 
 
 function Lobby({players,setPlayers,setLobbyId, setPlayerName }) {
   const [name, setName] = useState('');
@@ -11,15 +11,19 @@ function Lobby({players,setPlayers,setLobbyId, setPlayerName }) {
       setError('Please enter your name.');
       return;
     }
-  
-    socket.emit('createLobby', { name, isPrivate: true }, ({ lobbyId, error, players }) => {
+    let playerInfo={
+      name:name,
+      color:0,
+      owner:true
+    }
+    socket.emit('createLobby', { playerInfo, isPrivate: true ,started:false}, ({ lobbyId, error, players }) => {
       if (error) {
         setError(error);
         return;
       }
       setLobbyId(lobbyId);
       setPlayerName(name);
-      setPlayers(players); // Update players list
+      setPlayers(players); 
       setError(null);
     });
   };
@@ -29,19 +33,24 @@ function Lobby({players,setPlayers,setLobbyId, setPlayerName }) {
       setError('Please enter your name and lobby code.');
       return;
     }
+    let playerInfo={
+      name:name,
+      color:1,
+      owner:false
+    }
   
-    socket.emit('joinLobby', { name, lobbyId: lobbyCode }, ({ success, error, players }) => {
+    socket.emit('joinLobby', { playerInfo, lobbyId: lobbyCode }, ({ success, message, players }) => {
       if (error) {
-        setError(error);
+        setError(message);
         return;
       }
   
       if (success) {
         setLobbyId(lobbyCode);
         setPlayerName(name);
-        setPlayers(players); // Update players list
+        setPlayers(players);
       } else {
-        setError('Lobby not found!');
+        setError(message);
       }
     });
   };

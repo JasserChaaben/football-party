@@ -1,15 +1,13 @@
 import React, { useEffect, useState } from 'react';
-import socket from '../socket'; // Import the singleton socket
+import socket from '../socket'; 
 
 function GameBoard({players,setPlayers, lobbyId, playerName }) {
   const [error, setError] = useState(null);
-
+  const [owner, setOwner] = useState(false);
   useEffect(() => {
     console.log("Joining lobby....");
-    
-    console.log("test")
+    socket.emit('checkOwner',{lobbyId},({owner})=>{setOwner(owner);console.log("testing owner" + owner)})
    
-    
     socket.off('updateLobby'); 
     socket.on('updateLobby', handleUpdateLobby); 
 
@@ -18,14 +16,14 @@ function GameBoard({players,setPlayers, lobbyId, playerName }) {
       socket.off('updateLobby', handleUpdateLobby); 
       socket.emit('leaveLobby', { lobbyId, playerId: socket.id }); 
     };
-  }, [lobbyId, playerName]); // Re-run when lobbyId or playerName changes
+  }, [lobbyId, playerName]); 
 
   const handleUpdateLobby = (players) => {
     console.log("test")
     setPlayers(players);
+    socket.emit('checkOwner',{lobbyId},({owner})=>{setOwner(owner);console.log("testing owner" + owner)})
     console.log('Players updated:', players);
   };
-
   return (
     <div>
       <h3>lobby code is : {lobbyId}</h3>
@@ -34,9 +32,19 @@ function GameBoard({players,setPlayers, lobbyId, playerName }) {
       <p>Players in this lobby:</p>
       <ul>
         {players.map((player) => (
-          <li key={player.id}>{player.name}</li>
+          <li key={player.id}>{player.playerInfo.name} {playerName==player.playerInfo.name&&"(you)"}</li>
         ))}
       </ul>
+      
+     {owner&& <input
+  type="button"
+  value="Start Game"
+  onClick={() => {
+    socket.emit('startGame', { lobbyId}, ({ result }) => {
+     alert(result);
+    });
+  }}
+/>}
     </div>
   );
 }
