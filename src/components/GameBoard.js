@@ -1,13 +1,16 @@
 import React, { useEffect, useState } from 'react';
 import socket from '../socket'; 
-
 function GameBoard({players,setPlayers, lobbyId, playerName }) {
   const [error, setError] = useState(null);
   const [owner, setOwner] = useState(false);
+  const [turn, setTurn] = useState(false);
+  const [playDice,setPlayDice]= useState(false);
   const [gameStarted, setGameStarted] = useState(false);
+  const [Dice,setDice]= useState(0);
   useEffect(() => {
     console.log("Joining lobby....");
     socket.emit('checkOwner',{lobbyId},({owner})=>{setOwner(owner);console.log("testing owner" + owner)})
+    socket.emit('checkTurn',{lobbyId},({turn})=>{setTurn(turn);setPlayDice(turn);console.log("testing my turn : " + turn)})
     socket.emit('gameStarted',{lobbyId},({started})=>{setGameStarted(started);console.log("testing game if started : " + started)})
    
     socket.off('updateLobby'); 
@@ -24,11 +27,19 @@ function GameBoard({players,setPlayers, lobbyId, playerName }) {
     console.log("test")
     setPlayers(players);
     socket.emit('checkOwner',{lobbyId},({owner})=>{setOwner(owner);console.log("testing owner : " + owner)})
+    socket.emit('getDice',{lobbyId},({DiceRoll})=>{setDice(DiceRoll);console.log("Dice is : r" + DiceRoll)})
+    socket.emit('checkTurn',{lobbyId},({turn})=>{setTurn(turn);setPlayDice(turn);console.log("testing my turn : " + turn)})
     socket.emit('gameStarted',{lobbyId},({started})=>{setGameStarted(started);console.log("testing game if started : " + started)})
     console.log('Players updated:', players);
   };
+  const rollDice = () => {
+    socket.emit('rollDice', { lobbyId}, () => {
+    });
+    socket.emit('goNextTurn', { lobbyId}, () => {
+    });
+  };
   return (
-    <div>
+    <div className='GameBord'>
       <h3>lobby code is : {lobbyId}</h3>
       <h1>Game Board</h1>
       {error && <p style={{ color: 'red' }}>{error}</p>}
@@ -47,6 +58,10 @@ function GameBoard({players,setPlayers, lobbyId, playerName }) {
     });
   }}
 />}
+
+{gameStarted&&turn&&playDice&&<button onClick={rollDice}>Roll Dice</button>}
+<br></br>
+{gameStarted&&Dice}
     </div>
   );
 }
