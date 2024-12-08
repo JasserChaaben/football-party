@@ -1,5 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import socket from '../socket'; 
+import "./GameBoard.css";
+const Grid = [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30]
 function GameBoard({players,setPlayers, lobbyId, playerName }) {
   const [error, setError] = useState(null);
   const [owner, setOwner] = useState(false);
@@ -35,8 +37,6 @@ function GameBoard({players,setPlayers, lobbyId, playerName }) {
   const rollDice = () => {
     socket.emit('rollDice', { lobbyId}, () => {
     });
-    socket.emit('goNextTurn', { lobbyId}, () => {
-    });
   };
   return (
     <div className='GameBord'>
@@ -46,7 +46,7 @@ function GameBoard({players,setPlayers, lobbyId, playerName }) {
       <p>Players in this lobby:</p>
       <ul>
         {players.map((player) => (
-          <li key={player.id}>{player.playerInfo.name} {playerName==player.playerInfo.name&&"(you)"}</li>
+          <li key={player.id}>{gameStarted&&player.turn&&"--->"}{player.playerInfo.name} {playerName==player.playerInfo.name&&"(you)"}</li>
         ))}
       </ul>
       
@@ -62,6 +62,14 @@ function GameBoard({players,setPlayers, lobbyId, playerName }) {
 {gameStarted&&turn&&playDice&&<button onClick={rollDice}>Roll Dice</button>}
 <br></br>
 {gameStarted&&Dice}
+<div className="grid">
+    {Grid.map((item)=>(
+      <div className='cell'>
+        {players.map((player)=>(player.position==item&&<div className='cell-content'>{player.playerInfo.name}</div>))}
+        <div className='cell-number'>{item}</div>
+      </div>
+    ))}
+    </div>
     </div>
   );
 }

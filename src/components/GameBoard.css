@@ -1,0 +1,51 @@
+
+#GameBord{
+    display: flex;
+    flex-direction: column; 
+    margin: auto;
+    justify-content: center;
+  }
+.grid{
+    display: grid;
+    grid-template-columns: repeat(6, 1fr); /* 6 columns */
+    grid-template-rows: repeat(5, 1fr);   /* 5 rows */
+    gap: 1%; /* Space between cells */
+    width: 90vw; /* Board width scales with viewport */
+    max-width: 800px; /* Optional: Cap max width */
+    aspect-ratio: 6 / 5; /* Ensures square cells with grid proportions */
+    margin: auto; /* Center the board */
+    border: 2px solid #000; /* Optional: Gameboard border */
+  }
+  .cell-content {
+    width: 80%;
+    height: 40%;
+    border-radius: 50%;
+    background-color: red;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: white;
+    font-size: 0.8vw;
+    text-align: center;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+  
+  .cell {
+    position: relative;
+  background-color: #f0f0f0;
+  border: 1px solid #999;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  grid-template-rows: repeat(2, 1fr);
+  justify-items: center;
+  align-items: center;
+  }
+  .cell-number {
+    position: absolute;
+    bottom: 5%; /* Push to bottom-right */
+    right: 5%;
+    font-size: 0.8vw; /* Small but responsive text size */
+    color: #333;
+  }

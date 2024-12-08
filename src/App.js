@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import GameBoard from './components/GameBoard';
 import Lobby from './components/Lobby';
+import './App.css';
 
 function App() {
   const [lobbyId, setLobbyId] = useState(null);

@@ -2,9 +2,3 @@
   text-align: center;
   margin: auto;
 }
-#GameBord{
-  display: flex;
-  flex-direction: column; 
-  margin: auto;
-  justify-content: center;
-}
