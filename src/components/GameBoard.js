@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import socket from '../socket'; 
 import "./GameBoard.css";
+import MultipleChoices from './MultipleChoices';
 const Grid = [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30]
 function GameBoard({players,setPlayers, lobbyId, playerName }) {
   const [error, setError] = useState(null);
@@ -9,6 +10,12 @@ function GameBoard({players,setPlayers, lobbyId, playerName }) {
   const [playDice,setPlayDice]= useState(false);
   const [gameStarted, setGameStarted] = useState(false);
   const [Dice,setDice]= useState(0);
+  const [showPopup, setShowPopup] = useState(false);
+
+  const handleOpenPopup = () => {
+    setShowPopup(true);
+  };
+
   useEffect(() => {
     console.log("Joining lobby....");
     socket.emit('checkOwner',{lobbyId},({owner})=>{setOwner(owner);console.log("testing owner" + owner)})
@@ -43,13 +50,20 @@ function GameBoard({players,setPlayers, lobbyId, playerName }) {
       <h3>lobby code is : {lobbyId}</h3>
       <h1>Game Board</h1>
       {error && <p style={{ color: 'red' }}>{error}</p>}
-      <p>Players in this lobby:</p>
+      <p>  in this lobby:</p>
       <ul>
         {players.map((player) => (
           <li key={player.id}>{gameStarted&&player.turn&&"--->"}{player.playerInfo.name} {playerName==player.playerInfo.name&&"(you)"}</li>
         ))}
       </ul>
-      
+
+      <button onClick={handleOpenPopup}>Open Multiple Choices</button>
+      {showPopup && (
+        <MultipleChoices
+          Question="What is the capital of France?"
+          choices={['Paris', 'London', 'Berlin', 'Madrid']}
+        />
+      )}
      {owner&& !gameStarted&&<button
   onClick={() => {
     socket.emit('startGame', { lobbyId }, ({ result }) => {
