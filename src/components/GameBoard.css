@@ -7,14 +7,15 @@
   }
 .grid{
     display: grid;
-    grid-template-columns: repeat(6, 1fr); /* 6 columns */
-    grid-template-rows: repeat(5, 1fr);   /* 5 rows */
-    gap: 1%; /* Space between cells */
-    width: 90vw; /* Board width scales with viewport */
-    max-width: 800px; /* Optional: Cap max width */
-    aspect-ratio: 6 / 5; /* Ensures square cells with grid proportions */
-    margin: auto; /* Center the board */
-    border: 2px solid #000; /* Optional: Gameboard border */
+    grid-template-columns: repeat(6, 1fr); 
+    grid-template-rows: repeat(5, 1fr);   
+    gap: 1%; 
+    width: 90vw; 
+    max-width: 50%;
+    aspect-ratio: 6 / 5; 
+    margin: auto; 
+    border: 2px solid #000; 
+    margin-bottom: 2%;
   }
   .cell-content {
     width: 80%;
@@ -44,8 +45,8 @@
   }
   .cell-number {
     position: absolute;
-    bottom: 5%; /* Push to bottom-right */
+    bottom: 5%; 
     right: 5%;
-    font-size: 0.8vw; /* Small but responsive text size */
+    font-size: 0.8vw; 
     color: #333;
   }

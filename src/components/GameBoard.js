@@ -50,14 +50,16 @@ function GameBoard({players,setPlayers, lobbyId, playerName }) {
         ))}
       </ul>
       
-     {owner&& !gameStarted&&<input
-  type="button"
-  value="Start Game"
+     {owner&& !gameStarted&&<button
   onClick={() => {
-    socket.emit('startGame', { lobbyId}, ({ result }) => {
+    socket.emit('startGame', { lobbyId }, ({ result }) => {
+      // Handle result if needed
     });
   }}
-/>}
+>
+  Start Game
+</button>
+}
 
 {gameStarted&&turn&&playDice&&<button onClick={rollDice}>Roll Dice</button>}
 <br></br>

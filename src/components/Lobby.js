@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import socket from '../socket'; 
+import "./Lobby.css";
 
 function Lobby({players,setPlayers,setLobbyId, setPlayerName }) {
   const [name, setName] = useState('');
@@ -57,7 +58,7 @@ function Lobby({players,setPlayers,setLobbyId, setPlayerName }) {
   
 
   return (
-    <div>
+    <div className="Lobby">
       <input
         type="text"
         placeholder="Enter your name"
