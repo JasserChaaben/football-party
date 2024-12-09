@@ -48,8 +48,14 @@
   }
   
   .choice-button:hover {
-    background: linear-gradient(90deg, red, #4caf50);
+    background: linear-gradient(90deg, rgb(247, 89, 89), #7cf780);
     transform: scale(1.05);
+  }
+  .choice-button.disabled.selected {
+    background-color: yellow;
+    color: #000;
+    font-weight: bold;
+    transform: scale(1.1);
   }
   
   .choice-button.selected {

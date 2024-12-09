@@ -11,7 +11,9 @@ function GameBoard({players,setPlayers, lobbyId, playerName }) {
   const [gameStarted, setGameStarted] = useState(false);
   const [Dice,setDice]= useState(0);
   const [showPopup, setShowPopup] = useState(false);
-
+  const [goingToAnswer,setGoingToAnswer]= useState(false);
+  const [choices, setChoices] = useState([]);
+  const [question, setQuestion] = useState("");
   const handleOpenPopup = () => {
     setShowPopup(true);
   };
@@ -21,7 +23,8 @@ function GameBoard({players,setPlayers, lobbyId, playerName }) {
     socket.emit('checkOwner',{lobbyId},({owner})=>{setOwner(owner);console.log("testing owner" + owner)})
     socket.emit('checkTurn',{lobbyId},({turn})=>{setTurn(turn);setPlayDice(turn);console.log("testing my turn : " + turn)})
     socket.emit('gameStarted',{lobbyId},({started})=>{setGameStarted(started);console.log("testing game if started : " + started)})
-   
+ 
+    
     socket.off('updateLobby'); 
     socket.on('updateLobby', handleUpdateLobby); 
 
@@ -36,8 +39,12 @@ function GameBoard({players,setPlayers, lobbyId, playerName }) {
     console.log("test")
     setPlayers(players);
     socket.emit('checkOwner',{lobbyId},({owner})=>{setOwner(owner);console.log("testing owner : " + owner)})
+    socket.emit('getLobbyQuiz',{lobbyId},({question,choices})=>{setChoices(choices);setQuestion(question)})
     socket.emit('getDice',{lobbyId},({DiceRoll})=>{setDice(DiceRoll);console.log("Dice is : r" + DiceRoll)})
-    socket.emit('checkTurn',{lobbyId},({turn})=>{setTurn(turn);setPlayDice(turn);console.log("testing my turn : " + turn)})
+    socket.emit('checkTurn',{lobbyId},({turn})=>{setTurn(turn);setPlayDice(turn);console.log("testing my turn : " + turn)});
+    socket.emit('openQuiz',{lobbyId},({popUp})=>{setShowPopup(popUp);console.log("popUp is : "+popUp)})
+    socket.emit('getToAnswer',{lobbyId},({answer})=>{setGoingToAnswer(answer)})
+    
     socket.emit('gameStarted',{lobbyId},({started})=>{setGameStarted(started);console.log("testing game if started : " + started)})
     console.log('Players updated:', players);
   };
@@ -57,11 +64,13 @@ function GameBoard({players,setPlayers, lobbyId, playerName }) {
         ))}
       </ul>
 
-      <button onClick={handleOpenPopup}>Open Multiple Choices</button>
+      
       {showPopup && (
         <MultipleChoices
-          Question="What is the capital of France?"
-          choices={['Paris', 'London', 'Berlin', 'Madrid']}
+          lobbyId={lobbyId}
+          Question={question}
+          choices={choices}
+          goingToAnswer={goingToAnswer}
         />
       )}
      {owner&& !gameStarted&&<button
