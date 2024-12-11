@@ -173,6 +173,12 @@ function GameBoard({ players, setPlayers, lobbyId, playerName }) {
     <div className="GameBord">
       <h3>lobby code is : {lobbyId}</h3>
       {error && <p style={{ color: "red" }}>{error}</p>}
+
+      <div class="tooltip">
+        Rules :
+  <span class="question-mark">?</span>
+  <div class="tooltip-text">+ :Answer is Correct<br></br>- :Answer is wrong <br></br>MatchDay : -Dice<br></br>Market deal : +3 / -3 <br></br>Disciplinary Hearing : -Go back to beginning<br></br> Final : +Win/-8 <br></br>Training : +Dice</div>
+</div>
       <p> in this lobby:</p>
       <ul>
         {players.map((player) => (
