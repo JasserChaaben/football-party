@@ -12,7 +12,7 @@ function App() {
 
   return (
     <div>
-      <h1>Football Party</h1>
+      <h1>Managers Party</h1>
       {!lobbyId ? (
         <Lobby players={players} setPlayers={setPlayers}  setLobbyId={setLobbyId} setPlayerName={setPlayerName}  />
       ) : (
