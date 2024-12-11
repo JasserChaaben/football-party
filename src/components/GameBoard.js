@@ -2,10 +2,38 @@ import React, { useEffect, useState } from "react";
 import socket from "../socket";
 import "./GameBoard.css";
 import MultipleChoices from "./MultipleChoices";
-const Grid = [
-  1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22,
-  23, 24, 25, 26, 27, 28, 29, 30,
-];
+const Grid = {
+  1: "Beginning.jpg",
+  2: "Training.jpg",
+  3: "Deal.jpg",
+  4: "Training.jpg",
+  5: "MatchDay.jpg",
+  6: "Training.jpg",
+  7: "Deal.jpg",
+  8: "Training.jpg",
+  9: "Training.jpg",
+  10: "MatchDay.jpg",
+  11: "Training.jpg",
+  12: "Deal.jpg",
+  13: "Training.jpg",
+  14: "DisciplinaryHearing.jpg",
+  15: "MatchDay.jpg",
+  16: "Training.jpg",
+  17: "Deal.jpg",
+  18: "Training.jpg",
+  19: "Training.jpg",
+  20: "MatchDay.jpg",
+  21: "Training.jpg",
+  22: "Deal.jpg",
+  23: "Training.jpg",
+  24: "Training.jpg",
+  25: "MatchDay.jpg",
+  26: "Training.jpg",
+  27: "Training.jpg",
+  28: "DisciplinaryHearing.jpg",
+  29: "Final.jpg",
+  30: "Winner.jpg",
+};
 function GameBoard({ players, setPlayers, lobbyId, playerName }) {
   const [error, setError] = useState(null);
   const [owner, setOwner] = useState(false);
@@ -121,18 +149,28 @@ function GameBoard({ players, setPlayers, lobbyId, playerName }) {
       <br></br>
       {gameStarted && Dice}
       <div className="grid">
-        {Grid.map((item) => (
-          <div className="cell">
-            {players.map(
-              (player) =>
-                player.position == item && (
-                  <div className="cell-content">{player.playerInfo.name}</div>
-                ),
-            )}
-            <div className="cell-number">{item}</div>
-          </div>
-        ))}
-      </div>
+      {Object.entries(Grid).map(([item, image]) => (
+        <div
+          className="cell"
+          style={{
+            backgroundImage: `url(/${image})`, 
+            backgroundSize: "cover",
+            backgroundPosition: "center",
+          }}
+          key={item} 
+        >
+          {players.map(
+            (player) =>
+              player.position == item && (
+                <div className="cell-content" key={player.playerInfo.name}>
+                  {player.playerInfo.name}
+                </div>
+              ),
+          )}
+          <div className="cell-number">{item}</div>
+        </div>
+      ))}
+    </div>
     </div>
   );
 }
