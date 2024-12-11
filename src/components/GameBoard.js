@@ -172,7 +172,6 @@ function GameBoard({ players, setPlayers, lobbyId, playerName }) {
   return (
     <div className="GameBord">
       <h3>lobby code is : {lobbyId}</h3>
-      <h1>Game Board</h1>
       {error && <p style={{ color: "red" }}>{error}</p>}
       <p> in this lobby:</p>
       <ul>

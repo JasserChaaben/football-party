@@ -3,6 +3,7 @@ import GameBoard from './components/GameBoard';
 import Lobby from './components/Lobby';
 import './App.css';
 
+
 function App() {
   const [lobbyId, setLobbyId] = useState(null);
   const [playerName, setPlayerName] = useState("");
@@ -11,6 +12,7 @@ function App() {
 
   return (
     <div>
+      <h1>Football Party</h1>
       {!lobbyId ? (
         <Lobby players={players} setPlayers={setPlayers}  setLobbyId={setLobbyId} setPlayerName={setPlayerName}  />
       ) : (
