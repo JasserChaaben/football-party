@@ -50,8 +50,10 @@
     position: absolute;
     bottom: 5%; 
     right: 5%;
-    font-size: 0.8vw; 
-    color: #79d2ff; 
+    font-size: 1vw; 
+    color: #fff; 
+    background-color: #000;
+    border-radius: 60%;
 font-weight: bold;
 text-shadow: 2px 2px 6px rgba(0, 0, 0, 0.9);
 

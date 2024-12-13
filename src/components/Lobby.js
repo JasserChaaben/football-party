@@ -41,10 +41,7 @@ function Lobby({players,setPlayers,setLobbyId, setPlayerName }) {
     }
   
     socket.emit('joinLobby', { playerInfo, lobbyId: lobbyCode }, ({ success, message, players }) => {
-      if (error) {
-        setError(message);
-        return;
-      }
+    
   
       if (success) {
         setLobbyId(lobbyCode);
