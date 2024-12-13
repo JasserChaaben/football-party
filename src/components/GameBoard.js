@@ -105,6 +105,12 @@ function GameBoard({ players, setPlayers, lobbyId, playerName }) {
   const [showPopup, setShowPopup] = useState(false);
   const [choices, setChoices] = useState([]);
   const [question, setQuestion] = useState("");
+  const [isCopied, setIsCopied] = useState(false);
+  const copyToClipboard = () => {
+    navigator.clipboard.writeText(lobbyId);
+    setIsCopied(true);
+    setTimeout(() => setIsCopied(false), 2000);
+  };
   const handleOpenPopup = () => {
     setShowPopup(true);
   };
@@ -171,7 +177,16 @@ function GameBoard({ players, setPlayers, lobbyId, playerName }) {
   };
   return (
     <div className="GameBord">
-      <h3>lobby code is : {lobbyId}</h3>
+      <div className="lobbyCode">
+        copy lobby code : 
+      <div
+        className={`copy-square ${isCopied ? "copied" : ""}`}
+        onClick={copyToClipboard}
+        title="Copy Lobby Code"
+      >
+        {isCopied ? "✔" : ""}
+      </div>
+      </div>
       {error && <p style={{ color: "red" }}>{error}</p>}
 
       <div class="tooltip">
