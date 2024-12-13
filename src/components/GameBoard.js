@@ -181,13 +181,18 @@ function GameBoard({ players, setPlayers, lobbyId, playerName }) {
 </div>
       <p> in this lobby:</p>
       <ul>
-        {players.map((player) => (
-          <li key={player.id}>
-            {gameStarted && player.turn && "--->"}
-            {player.playerInfo.name}{" "}
-            {playerName == player.playerInfo.name && "(you)"}
-          </li>
-        ))}
+        {players.map((player) =>  {// Check the color value
+  return (
+    <li
+      key={player.id}
+      style={{ color: player.playerInfo.color }}
+    >
+      {gameStarted && player.turn && "--->"}
+      {player.playerInfo.name}{" "}
+      {playerName === player.playerInfo.name && "(you)"}
+    </li>
+  );
+})}
       </ul>
 
       {showPopup && (
@@ -228,9 +233,13 @@ function GameBoard({ players, setPlayers, lobbyId, playerName }) {
           {players.map(
             (player) =>
               player.position == item && (
-                <div className="cell-content" key={player.playerInfo.name}>
-                  {player.playerInfo.name}
-                </div>
+                <div 
+                className="cell-content" 
+                key={player.playerInfo.name} 
+                style={{ backgroundColor: player.playerInfo.color }}>
+                {player.playerInfo.name}
+              </div>
+              
               ),
           )}
           <div className="cell-number">{item}</div>

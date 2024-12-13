@@ -18,6 +18,27 @@ body {
     width: 80%;
     border: 2px solid #3b4c58;
   }
+  .color-picker {
+    width: 90%;
+    padding: 12px;
+    margin-bottom: 20px;
+    border: 2px solid #3b4c58;
+    border-radius: 8px;
+    background-color: #3a4a56;
+    color: #ffffff;
+    font-size: 16px;
+    cursor: pointer;
+  }
+  
+  .color-picker:focus {
+    outline: none;
+    border: 2px solid #64d864;
+  }
+  
+  .color-picker option {
+    background-color: #2e3b45;
+    color: #ffffff;
+  }
   
   input {
     width: 90%;

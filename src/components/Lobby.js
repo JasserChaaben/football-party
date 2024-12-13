@@ -6,7 +6,7 @@ function Lobby({players,setPlayers,setLobbyId, setPlayerName }) {
   const [name, setName] = useState('');
   const [lobbyCode, setLobbyCode] = useState('');
   const [error, setError] = useState(null);
-
+  const [color, setColor]= useState("Green");
   const createLobby = () => {
     if (!name) {
       setError('Please enter your name.');
@@ -14,7 +14,7 @@ function Lobby({players,setPlayers,setLobbyId, setPlayerName }) {
     }
     let playerInfo={
       name:name,
-      color:0,
+      color:color,
       owner:true
     }
     socket.emit('createLobby', { playerInfo, isPrivate: true ,started:false}, ({ lobbyId, error, players }) => {
@@ -36,7 +36,7 @@ function Lobby({players,setPlayers,setLobbyId, setPlayerName }) {
     }
     let playerInfo={
       name:name,
-      color:1,
+      color:color,
       owner:false
     }
   
@@ -65,6 +65,26 @@ function Lobby({players,setPlayers,setLobbyId, setPlayerName }) {
         value={name}
         onChange={(e) => setName(e.target.value)}
       />
+       <select
+    className="color-picker"
+    value={color}
+    onChange={(e) => setColor(e.target.value)}
+  >
+    <option value="green">Green</option>
+    <option value="red">Red</option>
+    <option value="blue">Blue</option>
+    <option value="yellow">Yellow</option>
+    <option value="orange">Orange</option>
+    <option value="purple">Purple</option>
+    <option value="pink">Pink</option>
+    <option value="brown">Brown</option>
+    <option value="cyan">Cyan</option>
+    <option value="lime">Lime</option>
+    <option value="teal">Teal</option>
+    <option value="magenta">Magenta</option>
+    <option value="gray">Gray</option>
+    <option value="indigo">Indigo</option>
+  </select>
       <button onClick={createLobby}>Create Private Lobby</button>
       <br />
       <input
