@@ -106,6 +106,7 @@ function GameBoard({ players, setPlayers, lobbyId, playerName }) {
   const [choices, setChoices] = useState([]);
   const [question, setQuestion] = useState("");
   const [isCopied, setIsCopied] = useState(false);
+  
   const copyToClipboard = () => {
     navigator.clipboard.writeText(lobbyId);
     setIsCopied(true);
@@ -116,33 +117,49 @@ function GameBoard({ players, setPlayers, lobbyId, playerName }) {
   };
 
   useEffect(() => {
-    console.log("Joining lobby....");
+    localStorage.setItem('userID', socket.id);
+    console.log("test");
+    setPlayers(players);
     socket.emit("checkOwner", { lobbyId }, ({ owner }) => {
       setOwner(owner);
-      console.log("testing owner" + owner);
+      console.log("testing owner : " + owner);
+    });
+    socket.emit("getLobbyQuiz", { lobbyId }, ({ question, choices }) => {
+      setChoices(choices);
+      setQuestion(question);
+    });
+    socket.emit("getDice", { lobbyId }, ({ DiceRoll }) => {
+      setDice(DiceRoll);
+      console.log("Dice is : r" + DiceRoll);
     });
     socket.emit("checkTurn", { lobbyId }, ({ turn }) => {
       setTurn(turn);
       setPlayDice(turn);
       console.log("testing my turn : " + turn);
     });
+    socket.emit("openQuiz", { lobbyId }, ({ popUp }) => {
+      setShowPopup(popUp);
+      console.log("popUp is : " + popUp);
+    });
+
     socket.emit("gameStarted", { lobbyId }, ({ started }) => {
       setGameStarted(started);
       console.log("testing game if started : " + started);
     });
+    console.log("Players updated:", players);
 
-    socket.off("updateLobby");
     socket.on("updateLobby", handleUpdateLobby);
 
-    console.log("test2");
+    console.log("test2"); 
     return () => {
-      socket.off("updateLobby", handleUpdateLobby);
       socket.emit("leaveLobby", { lobbyId, playerId: socket.id });
     };
   }, [lobbyId, playerName]);
 
   const handleUpdateLobby = (players) => {
     console.log("test");
+    
+    console.log("test2");
     setPlayers(players);
     socket.emit("checkOwner", { lobbyId }, ({ owner }) => {
       setOwner(owner);
@@ -177,7 +194,8 @@ function GameBoard({ players, setPlayers, lobbyId, playerName }) {
   };
   return (
     <div className="GameBord">
-      <div className="lobbyCode">
+      
+     {!gameStarted&& <div className="lobbyCode">
         copy lobby code : 
       <div
         className={`copy-square ${isCopied ? "copied" : ""}`}
@@ -186,7 +204,7 @@ function GameBoard({ players, setPlayers, lobbyId, playerName }) {
       >
         {isCopied ? "✔" : ""}
       </div>
-      </div>
+      </div>}
       {error && <p style={{ color: "red" }}>{error}</p>}
 
       <div class="tooltip">
@@ -198,6 +216,7 @@ function GameBoard({ players, setPlayers, lobbyId, playerName }) {
       <ul>
         {players.map((player) =>  {// Check the color value
   return (
+    
     <li
       key={player.id}
       style={{ color: player.playerInfo.color }}
