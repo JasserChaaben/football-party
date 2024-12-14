@@ -101,7 +101,32 @@ text-shadow: 2px 2px 6px rgba(0, 0, 0, 0.9);
     opacity: 1;
   }
   
-
+  .Leave_Lobby {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    width: 10%;
+    background: linear-gradient(to right, red, rgb(243, 162, 62));
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    padding: 10px;
+    font-size: 16px;
+    cursor: pointer;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    transition: transform 0.2s ease;
+  }
+  
+  .Leave_Lobby:hover {
+    background: linear-gradient(to right, rgb(243, 162, 62), rgb(243, 162, 62));
+    transform: scale(1.05);
+  }
+  
+  .Leave_Lobby:active {
+    transform: scale(0.95);
+  }
+  
   .lobbyCode {
     display: flex;
     flex-direction: row;

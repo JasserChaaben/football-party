@@ -95,7 +95,7 @@ const Grid = {
   90: "Winner.jpg",
 };
 
-function GameBoard({ players, setPlayers, lobbyId, playerName }) {
+function GameBoard({ players, setPlayers, setLobbyId,lobbyId, playerName }) {
   const [error, setError] = useState(null);
   const [owner, setOwner] = useState(false);
   const [turn, setTurn] = useState(false);
@@ -112,10 +112,6 @@ function GameBoard({ players, setPlayers, lobbyId, playerName }) {
     setIsCopied(true);
     setTimeout(() => setIsCopied(false), 2000);
   };
-  const handleOpenPopup = () => {
-    setShowPopup(true);
-  };
-
   useEffect(() => {
     localStorage.setItem('userID', socket.id);
     console.log("test");
@@ -151,9 +147,7 @@ function GameBoard({ players, setPlayers, lobbyId, playerName }) {
     socket.on("updateLobby", handleUpdateLobby);
 
     console.log("test2"); 
-    return () => {
-      socket.emit("leaveLobby", { lobbyId, playerId: socket.id });
-    };
+   
   }, [lobbyId, playerName]);
 
   const handleUpdateLobby = (players) => {
@@ -194,10 +188,19 @@ function GameBoard({ players, setPlayers, lobbyId, playerName }) {
   };
   return (
     <div className="GameBord">
-      
+      <button 
+      className="Leave_Lobby"
+  onClick={() => {
+    socket.emit("leaveLobby", { lobbyId, playerId: socket.id });
+    setLobbyId(null);
+    window.location.reload();
+  }}
+>
+  Leave lobby
+</button>
      {!gameStarted&& <div className="lobbyCode">
         copy lobby code : 
-      <div
+      <div 
         className={`copy-square ${isCopied ? "copied" : ""}`}
         onClick={copyToClipboard}
         title="Copy Lobby Code"
@@ -224,6 +227,7 @@ function GameBoard({ players, setPlayers, lobbyId, playerName }) {
       {gameStarted && player.turn && "--->"}
       {player.playerInfo.name}{" "}
       {playerName === player.playerInfo.name && "(you)"}
+      {player.disconnected&& "Disconnected ( "+player.timeToReconnect+" remaining )"}
     </li>
   );
 })}

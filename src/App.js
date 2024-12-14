@@ -16,7 +16,7 @@ function App() {
       {!lobbyId ? (
         <Lobby players={players} setPlayers={setPlayers}  setLobbyId={setLobbyId} setPlayerName={setPlayerName}  />
       ) : (
-        <GameBoard players={players} setPlayers={setPlayers} lobbyId={lobbyId} playerName={playerName} />
+        <GameBoard players={players} setPlayers={setPlayers} setLobbyId={setLobbyId}  lobbyId={lobbyId}  playerName={playerName} />
       )}
     </div>
   );
