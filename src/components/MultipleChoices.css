@@ -57,7 +57,28 @@
     font-weight: 600;
     text-align: center;
   }
+  .numberInput.disabled {
+    background-color: #d3d3d3;
+    cursor: not-allowed;
+    opacity: 0.6;
+  }
   
+  /* Basic styles for the number input */
+  .numberInput {
+    padding: 10px;
+    font-size: 1rem;
+    border: 2px solid #ccc;
+    border-radius: 5px;
+    width: 100%;
+    box-sizing: border-box;
+  }
+  
+  /* Styles for the submit button when disabled */
+  button.disabled {
+    background-color: #d3d3d3;
+    cursor: not-allowed;
+    opacity: 0.6;
+  }
   .Answers-box div:nth-child(odd) {
     background-color: #3b4c58;
   }

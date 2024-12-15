@@ -64,7 +64,7 @@ function NumberChoice({ lobbyId, Question, Timer }) {
 
         <input 
   type="number" 
-  className="numberInput" 
+  className={`numberInput ${!isMyTurn ? "disabled" : ""}`}
   value={myAnswer}
   onChange={(e) => setmyAnswer(e.target.value)}
   onKeyDown={(e) => {
@@ -73,8 +73,14 @@ function NumberChoice({ lobbyId, Question, Timer }) {
     }
   }} 
 />       
-<button className={!isMyTurn ? "disabled" : ""}
-              onClick={() => isMyTurn && handleSubmit()}>Submit Answer</button>
+
+<button 
+  className={`${!isMyTurn ? "disabled" : ""}`}
+  onClick={() => isMyTurn && handleSubmit()}
+>
+  Submit Answer
+</button>
+
                 
 <div className="Answers-box">{Answers.map((answer,index) => {
  return (
