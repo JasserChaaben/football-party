@@ -122,6 +122,10 @@ function GameBoard({ players, setPlayers, setLobbyId,lobbyId, playerName }) {
       setOwner(owner);
       console.log("testing owner : " + owner);
     });
+    socket.emit("openNumberQuiz", { lobbyId }, ({ popUp }) => {
+      setNumberPopup(popUp);
+      console.log("popUp is : " + popUp);
+    });
     socket.emit("getLobbyQuiz", { lobbyId }, ({ question, choices }) => {
       setChoices(choices);
       setQuestion(question);
@@ -176,6 +180,10 @@ function GameBoard({ players, setPlayers, setLobbyId,lobbyId, playerName }) {
     });
     socket.emit("openQuiz", { lobbyId }, ({ popUp }) => {
       setShowPopup(popUp);
+      console.log("popUp is : " + popUp);
+    });
+    socket.emit("openNumberQuiz", { lobbyId }, ({ popUp }) => {
+      setNumberPopup(popUp);
       console.log("popUp is : " + popUp);
     });
 
@@ -238,16 +246,16 @@ function GameBoard({ players, setPlayers, setLobbyId,lobbyId, playerName }) {
           lobbyId={lobbyId}
           Question={question}></NumberChoice>)}
       {showPopup && (
-        <NumberChoice
+        <MultipleChoices
           lobbyId={lobbyId}
           Question={question}
+          choices={choices}
         />
       )}
       {owner && !gameStarted && (
         <button
           onClick={() => {
             socket.emit("startGame", { lobbyId }, ({ result }) => {
-              // Handle result if needed
             });
           }}
         >

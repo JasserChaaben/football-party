@@ -4,6 +4,7 @@ import socket from "../socket";
 
 function NumberChoice({ lobbyId, Question, Timer }) {
   const [Answers,setAnswers] = useState([]);
+  const [myAnswer,setmyAnswer] = useState();
   const [timer, setTimer] = useState(Timer);
   const [ready, setReady] = useState(true);
   const [result, setResult] = useState("");
@@ -13,12 +14,48 @@ function NumberChoice({ lobbyId, Question, Timer }) {
     socket.emit("getToAnswer", { lobbyId }, ({ answer }) => {
       setIsMyTurn(answer);
     });
+    
+    socket.emit("getNumberSubmittedAnswer", { lobbyId }, ({ subAnsw }) => {
+        setAnswers(subAnsw);
+      });
+      socket.emit("getcurrentResult", { lobbyId }, ({ res }) => {
+        setResult(res);
+      });
+      setTimeout(() => { 
+        socket.emit("getNumberSubmittedAnswer", { lobbyId }, ({ subAnsw }) => {
+          setAnswers(subAnsw);
+          console.log(subAnsw)
+        });
+      }, 2000);
+    socket.off("numberChoiceUpdate");
+    socket.on("numberChoiceUpdate", handleUpdateLobby);
     return () => {
       socket.off("getToAnswer");
     };
   }, [lobbyId]);
- 
-
+  const handleUpdateLobby = (players) => {
+    socket.emit("getToAnswer", { lobbyId }, ({ answer }) => {
+        setIsMyTurn(answer);
+      });
+      socket.emit("getNumberSubmittedAnswer", { lobbyId }, ({ subAnsw }) => {
+        setAnswers(subAnsw);
+      });
+      socket.emit("getcurrentResult", { lobbyId }, ({ res }) => {
+        setResult(res);
+      });
+      setTimeout(() => { 
+        socket.emit("getNumberSubmittedAnswer", { lobbyId }, ({ subAnsw }) => {
+          setAnswers(subAnsw);
+          console.log(subAnsw)
+        });
+      }, 2000);
+  };
+  const handleSubmit=()=>{
+    console.log(myAnswer)
+    if (!ready) return;
+    setReady(false);
+    socket.emit("submitNumberAnswer", { lobbyId, choice:myAnswer }, ({}) => {});
+  }
   return (
     <div className="multiple-choices-overlay">
       <div className="multiple-choices-box">
@@ -28,15 +65,30 @@ function NumberChoice({ lobbyId, Question, Timer }) {
         <input 
   type="number" 
   className="numberInput" 
+  value={myAnswer}
+  onChange={(e) => setmyAnswer(e.target.value)}
   onKeyDown={(e) => {
     if (!/^[0-9]$/.test(e.key) && e.key !== "Backspace") {
       e.preventDefault();
     }
   }} 
-/>          
-<div className="Answers-box"></div>
-<button>Submit Answer</button>
+/>       
+<button className={!isMyTurn ? "disabled" : ""}
+              onClick={() => isMyTurn && handleSubmit()}>Submit Answer</button>
+                
+<div className="Answers-box">{Answers.map((answer,index) => {
+ return (
+    <div key={index}>
+      { !isMyTurn 
+        ? `${index + 1} : ${answer.name} chose ${answer.answer}` 
+        : `${index + 1} : ${answer.name} Answered`
+      }
+    </div>
+  );
+  
+})}  </div>
       </div>
+      
     </div>
   );
 }
