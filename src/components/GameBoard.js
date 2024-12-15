@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import socket from "../socket";
 import "./GameBoard.css";
 import MultipleChoices from "./MultipleChoices";
+import NumberChoice from "./NumberChoice";
 const Grid = {
   1: "Beginning.jpg",
   2: "Deal.jpg",
@@ -103,6 +104,7 @@ function GameBoard({ players, setPlayers, setLobbyId,lobbyId, playerName }) {
   const [gameStarted, setGameStarted] = useState(false);
   const [Dice, setDice] = useState(0);
   const [showPopup, setShowPopup] = useState(false);
+  const [numberPopup, setNumberPopup] = useState(false);
   const [choices, setChoices] = useState([]);
   const [question, setQuestion] = useState("");
   const [isCopied, setIsCopied] = useState(false);
@@ -232,12 +234,13 @@ function GameBoard({ players, setPlayers, setLobbyId,lobbyId, playerName }) {
   );
 })}
       </ul>
-
+      {numberPopup&&(<NumberChoice 
+          lobbyId={lobbyId}
+          Question={question}></NumberChoice>)}
       {showPopup && (
-        <MultipleChoices
+        <NumberChoice
           lobbyId={lobbyId}
           Question={question}
-          choices={choices}
         />
       )}
       {owner && !gameStarted && (
@@ -284,6 +287,7 @@ function GameBoard({ players, setPlayers, setLobbyId,lobbyId, playerName }) {
         </div>
       ))}
     </div>
+    
     </div>
   );
 }
