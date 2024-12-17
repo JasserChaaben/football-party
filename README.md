@@ -10,3 +10,6 @@
 
 ## Backend
 ### https://github.com/JasserChaaben/backend-for-football-app
+
+## Additional Notes
+### All images used in this project are AI-generated.
