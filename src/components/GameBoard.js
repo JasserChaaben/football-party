@@ -249,7 +249,8 @@ function GameBoard({ players, setPlayers, setLobbyId,lobbyId, playerName }) {
       {gameStarted && player.turn && "--->"}
       {player.playerInfo.name}{" "}
       {playerName === player.playerInfo.name && "(you)"}
-      {player.imune && " IMMUNITY ACTIVATED"}
+      {player.imune && " IMMUNITY ACTIVATED "}
+      {player.Double && " Dice X2 "}
       {player.disconnected&& "Disconnected ( "+player.timeToReconnect+" remaining )"}
     </li>
   );
