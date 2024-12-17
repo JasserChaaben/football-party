@@ -20,13 +20,8 @@ function NumberChoice({ lobbyId, Question, Timer }) {
       });
       socket.emit("getcurrentResult", { lobbyId }, ({ res }) => {
         setResult(res);
+        console.log(result)
       });
-      setTimeout(() => { 
-        socket.emit("getNumberSubmittedAnswer", { lobbyId }, ({ subAnsw }) => {
-          setAnswers(subAnsw);
-          console.log(subAnsw)
-        });
-      }, 2000);
     socket.off("numberChoiceUpdate");
     socket.on("numberChoiceUpdate", handleUpdateLobby);
     return () => {
@@ -43,12 +38,6 @@ function NumberChoice({ lobbyId, Question, Timer }) {
       socket.emit("getcurrentResult", { lobbyId }, ({ res }) => {
         setResult(res);
       });
-      setTimeout(() => { 
-        socket.emit("getNumberSubmittedAnswer", { lobbyId }, ({ subAnsw }) => {
-          setAnswers(subAnsw);
-          console.log(subAnsw)
-        });
-      }, 2000);
   };
   const handleSubmit=()=>{
     console.log(myAnswer)
@@ -89,12 +78,15 @@ function NumberChoice({ lobbyId, Question, Timer }) {
         ? `${index + 1} : ${answer.name} chose ${answer.answer}` 
         : `${index + 1} : ${answer.name} Answered`
       }
+      
     </div>
+    
   );
   
 })}  </div>
+<br></br>
+{result}
       </div>
-      
     </div>
   );
 }

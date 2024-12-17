@@ -3,6 +3,7 @@ import socket from "../socket";
 import "./GameBoard.css";
 import MultipleChoices from "./MultipleChoices";
 import NumberChoice from "./NumberChoice";
+import Awards from "./Awards";
 const Grid = {
   1: "Beginning.jpg",
   2: "Deal.jpg",
@@ -105,6 +106,7 @@ function GameBoard({ players, setPlayers, setLobbyId,lobbyId, playerName }) {
   const [Dice, setDice] = useState(0);
   const [showPopup, setShowPopup] = useState(false);
   const [numberPopup, setNumberPopup] = useState(false);
+  const [awardsPopup, setawardsPopup] = useState(false);
   const [choices, setChoices] = useState([]);
   const [question, setQuestion] = useState("");
   const [isCopied, setIsCopied] = useState(false);
@@ -144,6 +146,11 @@ function GameBoard({ players, setPlayers, setLobbyId,lobbyId, playerName }) {
       console.log("popUp is : " + popUp);
     });
 
+    socket.emit("getShowAwards", { lobbyId }, ({ showAwards }) => {
+      setawardsPopup(showAwards);
+      console.log("awards is : " + showAwards);
+    });
+
     socket.emit("gameStarted", { lobbyId }, ({ started }) => {
       setGameStarted(started);
       console.log("testing game if started : " + started);
@@ -181,6 +188,11 @@ function GameBoard({ players, setPlayers, setLobbyId,lobbyId, playerName }) {
     socket.emit("openQuiz", { lobbyId }, ({ popUp }) => {
       setShowPopup(popUp);
       console.log("popUp is : " + popUp);
+    });
+    
+    socket.emit("getShowAwards", { lobbyId }, ({ showAwards }) => {
+      setawardsPopup(showAwards);
+      console.log("awards is : " + showAwards);
     });
     socket.emit("openNumberQuiz", { lobbyId }, ({ popUp }) => {
       setNumberPopup(popUp);
@@ -237,11 +249,13 @@ function GameBoard({ players, setPlayers, setLobbyId,lobbyId, playerName }) {
       {gameStarted && player.turn && "--->"}
       {player.playerInfo.name}{" "}
       {playerName === player.playerInfo.name && "(you)"}
+      {player.imune && " IMMUNITY ACTIVATED"}
       {player.disconnected&& "Disconnected ( "+player.timeToReconnect+" remaining )"}
     </li>
   );
 })}
       </ul>
+      {awardsPopup&&<Awards lobbyId={lobbyId}/>}
       {numberPopup&&(<NumberChoice 
           lobbyId={lobbyId}
           Question={question}></NumberChoice>)}
