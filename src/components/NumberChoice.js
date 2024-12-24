@@ -63,12 +63,18 @@ function NumberChoice({ lobbyId, Question }) {
   type="number" 
   className={`numberInput ${!isMyTurn ? "disabled" : ""}`}
   value={myAnswer}
+  
   onChange={(e) => setmyAnswer(e.target.value)}
   onKeyDown={(e) => {
     if (!/^[0-9]$/.test(e.key) && e.key !== "Backspace") {
       e.preventDefault();
     }
+    if (e.key === "Enter") {
+      e.preventDefault();
+      handleSubmit();
+    }
   }} 
+  
 />       
 
 <button 

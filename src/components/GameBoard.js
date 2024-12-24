@@ -310,6 +310,12 @@ function GameBoard({ players, setPlayers, setLobbyId,lobbyId, playerName }) {
           onChange={(event) => {
             setChatMessage(event.target.value); 
           }} 
+          onKeyDown={(event) => {
+            if (event.key === "Enter") {
+              event.preventDefault();
+              handleChatMessage();
+            }
+          }}
         />
     <button className="SendButton" onClick={handleChatMessage}>Send</button>
   </div>
