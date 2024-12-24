@@ -110,6 +110,8 @@ function GameBoard({ players, setPlayers, setLobbyId,lobbyId, playerName }) {
   const [choices, setChoices] = useState([]);
   const [question, setQuestion] = useState("");
   const [isCopied, setIsCopied] = useState(false);
+  const [message, setMessage] = useState("");
+  const [messageColor, setMessageColor] = useState("red");
   
   const copyToClipboard = () => {
     navigator.clipboard.writeText(lobbyId);
@@ -158,11 +160,21 @@ function GameBoard({ players, setPlayers, setLobbyId,lobbyId, playerName }) {
     console.log("Players updated:", players);
 
     socket.on("updateLobby", handleUpdateLobby);
+    socket.on("updateMessage", handleMessage);
 
     console.log("test2"); 
    
   }, [lobbyId, playerName]);
 
+
+  const handleMessage = (players) => {
+  
+    socket.emit("getMessage", { lobbyId }, ({ message,messageColor }) => {
+      setMessage(message);
+      setMessageColor(messageColor);
+    });
+  
+  }
   const handleUpdateLobby = (players) => {
     console.log("test");
     
@@ -277,7 +289,7 @@ function GameBoard({ players, setPlayers, setLobbyId,lobbyId, playerName }) {
           Start Game
         </button>
       )}
-
+      <div className="Message" style={{ color: messageColor }}>{message}</div>
       {gameStarted && turn && playDice && (
         <button onClick={rollDice}>Roll Dice</button>
       )}

@@ -2,15 +2,19 @@ import React, { useState, useEffect } from "react";
 import "./MultipleChoices.css";
 import socket from "../socket";
 
-function NumberChoice({ lobbyId, Question, Timer }) {
+function NumberChoice({ lobbyId, Question }) {
   const [Answers,setAnswers] = useState([]);
   const [myAnswer,setmyAnswer] = useState();
-  const [timer, setTimer] = useState(Timer);
+  const [timer, setTimer] = useState(20);
   const [ready, setReady] = useState(true);
   const [result, setResult] = useState("");
   const [isMyTurn, setIsMyTurn] = useState(false);
 
   useEffect(() => {
+    socket.emit("getTimer", { lobbyId }, ({ Timer }) => {
+      setTimer(Timer);
+      console.log("Timer : "+Timer)
+    });
     socket.emit("getToAnswer", { lobbyId }, ({ answer }) => {
       setIsMyTurn(answer);
     });
@@ -37,6 +41,10 @@ function NumberChoice({ lobbyId, Question, Timer }) {
       });
       socket.emit("getcurrentResult", { lobbyId }, ({ res }) => {
         setResult(res);
+      });
+      socket.emit("getTimer", { lobbyId }, ({ Timer }) => {
+        setTimer(Timer);
+        console.log("Timer : "+Timer)
       });
   };
   const handleSubmit=()=>{
