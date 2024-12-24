@@ -13,3 +13,4 @@
 
 ## Additional Notes
 ### All images used in this project are AI-generated.
+### this website is not complete it lacks a lot of features but it does the job of having a lobby and a cycle of games (start / playing / winning / restart)
