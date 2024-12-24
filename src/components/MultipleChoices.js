@@ -24,6 +24,10 @@ function MultipleChoices({ lobbyId, Question, choices }) {
     socket.emit("submitAnswer", { lobbyId, choice }, ({}) => {});
   };
   useEffect(() => {
+    socket.emit("getTimer", { lobbyId }, ({ Timer }) => {
+      setTimer(Timer);
+      console.log("Timer : "+Timer)
+    });
     socket.off("multipleChoicesUpdate");
     socket.on("multipleChoicesUpdate", handleUpdateLobby);
   }, [selectedChoice]);
