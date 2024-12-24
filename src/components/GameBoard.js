@@ -170,11 +170,10 @@ function GameBoard({ players, setPlayers, setLobbyId,lobbyId, playerName }) {
   }, [lobbyId, playerName]);
 
   const handleChatMessage = () => {
-    console.log("chatMessage : "+ chatMessage);
-    socket.emit("addChatMessage", { lobbyId ,message:chatMessage}, () => {
-     
-    });
-    setChatMessage(""); 
+    if (chatMessage.trim() !== "") {
+      socket.emit("addChatMessage", { lobbyId, message: chatMessage }, () => {});
+      setChatMessage(""); 
+    }
   }
   const handleMessage = () => {
   
