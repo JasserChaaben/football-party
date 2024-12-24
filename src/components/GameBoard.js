@@ -112,6 +112,8 @@ function GameBoard({ players, setPlayers, setLobbyId,lobbyId, playerName }) {
   const [isCopied, setIsCopied] = useState(false);
   const [message, setMessage] = useState("");
   const [messageColor, setMessageColor] = useState("red");
+  const [chatMessage,setChatMessage]= useState("");
+  const [chat,setChat]= useState([]);
   
   const copyToClipboard = () => {
     navigator.clipboard.writeText(lobbyId);
@@ -161,19 +163,31 @@ function GameBoard({ players, setPlayers, setLobbyId,lobbyId, playerName }) {
 
     socket.on("updateLobby", handleUpdateLobby);
     socket.on("updateMessage", handleMessage);
+    socket.on("chatMessage", handleChat);
 
     console.log("test2"); 
    
   }, [lobbyId, playerName]);
 
-
-  const handleMessage = (players) => {
+  const handleChatMessage = () => {
+    console.log("chatMessage : "+ chatMessage);
+    socket.emit("addChatMessage", { lobbyId ,message:chatMessage}, () => {
+     
+    });
+    setChatMessage(""); 
+  }
+  const handleMessage = () => {
   
     socket.emit("getMessage", { lobbyId }, ({ message,messageColor }) => {
       setMessage(message);
       setMessageColor(messageColor);
     });
   
+  }
+  const handleChat=()=>{
+    socket.emit("getChat", { lobbyId }, ({ chat }) => {
+      setChat(chat);
+    });
   }
   const handleUpdateLobby = (players) => {
     console.log("test");
@@ -232,6 +246,8 @@ function GameBoard({ players, setPlayers, setLobbyId,lobbyId, playerName }) {
 >
   Leave lobby
 </button>
+<div className="Box">
+<div >
      {!gameStarted&& <div className="lobbyCode">
         copy lobby code : 
       <div 
@@ -278,7 +294,28 @@ function GameBoard({ players, setPlayers, setLobbyId,lobbyId, playerName }) {
           Question={question}
           choices={choices}
         />
-      )}
+      )}</div>
+      <div className="Chat">
+  <div className="MessageSpace">
+  {chat.map((message, index) => (
+          <div key={index} className="ChatMessage" style={{ color: message.color }}>
+            {message.text}
+          </div>
+        ))}
+  </div>
+  <div className="InputContainer">
+  <textarea
+          className="InputSpace"
+          placeholder="Type your message..."
+          value={chatMessage} 
+          onChange={(event) => {
+            setChatMessage(event.target.value); 
+          }} 
+        />
+    <button className="SendButton" onClick={handleChatMessage}>Send</button>
+  </div>
+</div></div>
+      
       {owner && !gameStarted && (
         <button
           onClick={() => {
